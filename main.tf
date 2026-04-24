@@ -22,23 +22,23 @@ module "cluster" {
   resource_group   = var.ibmcloud_resource_group
 
   # Feature Flags
-  create_cluster         = var.create_cluster
-  create_transit_gateway = var.create_transit_gateway
-  create_cos_instance    = var.create_cos_instance
+  create_cluster         = var.create_roks_cluster
+  create_transit_gateway = var.create_roks_transit_gateway
+  create_cos_instance    = var.create_roks_registry_cos_instance
 
   # Cluster VPC Configuration
-  cluster_vpc_name = var.cluster_vpc_name
+  cluster_vpc_name = var.roks_cluster_vpc_name
 
   # Transit Gateway Configuration
-  transit_gateway_name = var.transit_gateway_name
+  transit_gateway_name = var.roks_transit_gateway_name
 
   # Cloud Object Storage Configuration
-  cos_instance_name = var.cos_instance_name
+  cos_instance_name = var.roks_cos_instance_name
 
   # OpenShift Cluster Configuration
   openshift_cluster_name    = var.openshift_cluster_name
   openshift_cluster_version = var.openshift_cluster_version
-  workers_per_zone          = var.workers_per_zone
-  min_worker_vcpu_count     = var.min_worker_vcpu_count
-  min_worker_memory_gb      = var.min_worker_memory_gb
+  workers_per_zone          = var.roks_workers_per_zone
+  min_worker_vcpu_count     = var.roks_min_worker_vcpu_count
+  min_worker_memory_gb      = var.roks_min_worker_memory_gb
 }
