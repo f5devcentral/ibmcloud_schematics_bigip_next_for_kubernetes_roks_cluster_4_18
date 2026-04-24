@@ -36,7 +36,7 @@ The deployment can orchestrate any or all of the following components:
 | `workers_per_zone` | Number of worker nodes per availability zone (3 zones are always used). | REQUIRED when `create_cluster` is `true` | `1` (default) |
 | `min_worker_vcpu_count` | Minimum vCPU count for worker node flavor auto-selection (bx2 series). | REQUIRED when `create_cluster` is `true` | `16` (default) |
 | `min_worker_memory_gb` | Minimum memory in GB for worker node flavor auto-selection (bx2 series). | REQUIRED when `create_cluster` is `true` | `64` (default) |
-| `cos_instance_name` | Name of the COS instance for the OpenShift registry. Leave empty to use `<cluster_name>-cos`. | Optional | `""` (default) |
+| `cos_instance_name` | Name of the COS instance for the OpenShift registry. | Optional | `tf-openshift-cos-instance` (default) |
 
 ### Deployment Variables — Transit Gateway
 
@@ -152,7 +152,7 @@ cluster_vpc_name          = "tf-cluster-vpc"
 workers_per_zone          = 1
 min_worker_vcpu_count     = 16
 min_worker_memory_gb      = 64
-cos_instance_name         = ""
+cos_instance_name         = "tf-openshift-cos-instance"
 
 # Transit Gateway configuration
 transit_gateway_name = "tf-tgw"
@@ -164,15 +164,16 @@ View all outputs after apply:
 
 ```bash
 terraform output                                        # All outputs
-terraform output cluster_id                             # OpenShift cluster ID
+terraform output roks_cluster_id                        # OpenShift cluster ID
 terraform output openshift_cluster_public_endpoint      # Public API endpoint
-terraform output transit_gateway_id                     # Transit Gateway ID
+terraform output roks_transit_gateway_id                # Transit Gateway ID
+terraform output kubeconfig_file_path                   # Path to kubeconfig
 ```
 
 | Output | Description |
 | ------ | ----------- |
-| `cluster_id` | ID of the OpenShift cluster |
-| `cluster_name` | Name of the OpenShift cluster |
+| `roks_cluster_id` | ID of the OpenShift cluster |
+| `roks_cluster_name` | Name of the OpenShift cluster |
 | `openshift_cluster_id` | ID of the OpenShift cluster (alias) |
 | `openshift_cluster_name` | Name of the OpenShift cluster (alias) |
 | `openshift_cluster_public_endpoint` | Public API server endpoint URL |
@@ -182,15 +183,19 @@ terraform output transit_gateway_id                     # Transit Gateway ID
 | `openshift_cluster_crn` | CRN of the OpenShift cluster |
 | `openshift_version_used` | Resolved OpenShift version (useful when auto-detected) |
 | `available_openshift_versions` | All available OpenShift versions in the cluster region |
-| `openshift_worker_zone[1-3]_ip` | Worker node IP address per availability zone |
-| `cluster_vpc_id` | ID of the cluster VPC |
-| `cluster_vpc_name` | Name of the cluster VPC |
-| `cluster_vpc_crn` | CRN of the cluster VPC |
-| `transit_gateway_id` | ID of the Transit Gateway |
-| `transit_gateway_name` | Name of the Transit Gateway |
-| `transit_gateway_crn` | CRN of the Transit Gateway |
-| `transit_gateway_location` | Location of the Transit Gateway |
-| `transit_gateway_global_routing` | Whether global routing is enabled |
+| `openshift_worker_zone1_ip` | Worker node IP address in zone 1 |
+| `openshift_worker_zone2_ip` | Worker node IP address in zone 2 |
+| `openshift_worker_zone3_ip` | Worker node IP address in zone 3 |
+| `roks_cluster_vpc_id` | ID of the cluster VPC |
+| `roks_cluster_vpc_name` | Name of the cluster VPC |
+| `roks_cluster_vpc_crn` | CRN of the cluster VPC |
+| `roks_transit_gateway_id` | ID of the Transit Gateway |
+| `roks_transit_gateway_name` | Name of the Transit Gateway |
+| `roks_transit_gateway_crn` | CRN of the Transit Gateway |
+| `roks_transit_gateway_location` | Location of the Transit Gateway |
+| `roks_transit_gateway_global_routing` | Whether global routing is enabled |
+| `transit_gateway_connections` | Map of Transit Gateway connection names |
+| `kubeconfig_file_path` | Path to the kubeconfig file (`~/.kube/config`) |
 
 ## Debugging & Troubleshooting
 
@@ -213,5 +218,5 @@ terraform state list module.cluster
 | ----- | -------- |
 | Cluster creation times out after 120 min | Check IBM Cloud status for regional incidents. Re-run `terraform apply`; the cluster resource will resume. |
 | `Error: no available zone` | The `min_worker_vcpu_count` / `min_worker_memory_gb` combination may not match any `bx2` flavor in the region. Lower the minimums or set `worker_flavor` explicitly. |
-| COS instance quota exceeded | IBM Cloud allows one free COS instance per account. Set `cos_instance_name` to the name of an existing COS instance and `create_cos_instance = false`, then supply the CRN manually, or remove the quota limit. |
+| COS instance quota exceeded | IBM Cloud allows one free COS instance per account. Set `create_cos_instance = false` and supply an existing COS instance, or remove the quota limit. |
 | Transit Gateway connection pending | Transit Gateway connections can take several minutes to activate after the cluster VPC is attached. This is normal. |

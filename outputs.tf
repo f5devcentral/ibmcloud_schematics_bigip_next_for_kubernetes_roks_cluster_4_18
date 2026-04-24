@@ -4,12 +4,12 @@
 # ============================================================
 
 # Cluster Outputs
-output "cluster_id" {
+output "roks_cluster_id" {
   description = "ID of the OpenShift cluster"
   value       = module.cluster.cluster_id
 }
 
-output "cluster_name" {
+output "roks_cluster_name" {
   description = "Name of the OpenShift cluster"
   value       = module.cluster.cluster_name
 }
@@ -76,43 +76,43 @@ output "openshift_worker_zone3_ip" {
 }
 
 # Cluster VPC Outputs
-output "cluster_vpc_id" {
+output "roks_cluster_vpc_id" {
   description = "ID of the cluster VPC"
   value       = module.cluster.cluster_vpc_id
 }
 
-output "cluster_vpc_name" {
+output "roks_cluster_vpc_name" {
   description = "Name of the cluster VPC"
   value       = module.cluster.cluster_vpc_name
 }
 
-output "cluster_vpc_crn" {
+output "roks_cluster_vpc_crn" {
   description = "CRN of the cluster VPC"
   value       = module.cluster.cluster_vpc_crn
 }
 
 # Transit Gateway Outputs
-output "transit_gateway_id" {
+output "roks_transit_gateway_id" {
   description = "ID of the Transit Gateway"
   value       = module.cluster.transit_gateway_id
 }
 
-output "transit_gateway_name" {
+output "roks_transit_gateway_name" {
   description = "Name of the Transit Gateway"
   value       = module.cluster.transit_gateway_name
 }
 
-output "transit_gateway_crn" {
+output "roks_transit_gateway_crn" {
   description = "CRN of the Transit Gateway"
   value       = module.cluster.transit_gateway_crn
 }
 
-output "transit_gateway_location" {
+output "roks_transit_gateway_location" {
   description = "Location of the Transit Gateway"
   value       = module.cluster.transit_gateway_location
 }
 
-output "transit_gateway_global_routing" {
+output "roks_transit_gateway_global_routing" {
   description = "Global routing status of the Transit Gateway"
   value       = module.cluster.transit_gateway_global_routing
 }

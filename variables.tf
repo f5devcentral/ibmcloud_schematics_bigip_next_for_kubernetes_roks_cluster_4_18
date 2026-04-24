@@ -23,7 +23,7 @@ variable "ibmcloud_cluster_region" {
 variable "ibmcloud_resource_group" {
   description = "IBM Cloud Resource Group name (leave empty to use account default)"
   type        = string
-  default     = ""
+  default     = "default"
 }
 
 # ============================================================
@@ -91,7 +91,7 @@ variable "min_worker_memory_gb" {
 variable "cos_instance_name" {
   description = "Name of the COS instance for OpenShift registry (defaults to cluster_name-cos)"
   type        = string
-  default     = ""
+  default     = "tf-openshift-cos-instance"
 }
 
 # ============================================================
