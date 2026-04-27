@@ -59,9 +59,24 @@ variable "roks_cluster_vpc_name" {
 }
 
 variable "openshift_cluster_name" {
-  description = "Name of the OpenShift cluster"
+  description = "Name of the OpenShift cluster (max 32 chars, must start with a letter, alphanumeric/-/_/.)"
   type        = string
   default     = "tf-openshift-cluster"
+
+  validation {
+    condition     = length(var.openshift_cluster_name) <= 32
+    error_message = "openshift_cluster_name must be 32 characters or fewer (IBM Cloud limit)."
+  }
+
+  validation {
+    condition     = can(regex("^[a-zA-Z]", var.openshift_cluster_name))
+    error_message = "openshift_cluster_name must begin with a letter."
+  }
+
+  validation {
+    condition     = can(regex("^[a-zA-Z][a-zA-Z0-9._-]*$", var.openshift_cluster_name))
+    error_message = "openshift_cluster_name may only contain letters, numbers, '-', '_', and '.'."
+  }
 }
 
 variable "openshift_cluster_version" {
@@ -103,4 +118,3 @@ variable "roks_transit_gateway_name" {
   type        = string
   default     = "tf-tgw"
 }
-
